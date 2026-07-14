@@ -157,6 +157,16 @@
   background: rgba(255, 255, 255, 0.5);
 }
 
+.navbar__username
+{
+  display: inline-block;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
+}
+
 .navbar__burger
 {
   display: none;

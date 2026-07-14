@@ -5,6 +5,7 @@ import express from "express";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
 import morgan from "morgan";
+import path from "node:path";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUI from "swagger-ui-express";
 
@@ -58,7 +59,8 @@ app.use(express.json({ limit: "1mb" }));
 app.use(express.urlencoded({ extended: true, limit: "6mb" }));
 
 // CORS per le immagini statiche (serve agli avatar caricati dal frontend)
-app.use("/uploads", cors({ origin: true, credentials: true }), express.static("uploads"));
+const uploadsDir = path.resolve(process.cwd(), "uploads");
+app.use("/uploads", cors({ origin: true, credentials: true }), express.static(uploadsDir));
 
 // Catch JSON parse errors and return 400 instead of 500
 app.use((err: unknown, _req: express.Request, res: express.Response, next: express.NextFunction) =>
@@ -100,9 +102,23 @@ const swaggerDefinition = {
   },
 };
 
+const __dirname = import.meta.dirname;
+
+/*  Calcola il path relativo dalla cwd alla directory di questo file
+    (es. "src" se avviato da backend/, "backend/src" se avviato da root).
+    In produzione (dist/) sarà "dist" / "backend/dist".                */
+const relDir = path.relative(process.cwd(), __dirname);
+
 const options = {
   swaggerDefinition,
-  apis: ["./src/routes/*.ts", "./src/controllers/*.ts", "./src/schemas/*.ts"],
+  apis: [
+    path.join(relDir, "routes/*.ts"),
+    path.join(relDir, "routes/*.js"),
+    path.join(relDir, "controllers/*.ts"),
+    path.join(relDir, "controllers/*.js"),
+    path.join(relDir, "schemas/*.ts"),
+    path.join(relDir, "schemas/*.js"),
+  ],
 };
 
 const swaggerSpec = swaggerJSDoc(options);
@@ -111,8 +127,8 @@ app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 // Routes
 import { authRouter } from "./routes/auth.routes.js";
 import { challengeRouter } from "./routes/challenge.routes.js";
-import { userRouter } from "./routes/user.routes.js";
 import { e2eRouter } from "./routes/e2e.routes.js";
+import { userRouter } from "./routes/user.routes.js";
 
 app.use("/auth", authLimiter, authRouter);
 app.use("/challenges", challengeRouter);

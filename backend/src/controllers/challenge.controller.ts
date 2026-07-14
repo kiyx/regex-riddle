@@ -56,6 +56,7 @@ export async function getChallenges(
 {
   const { authorId, unsolvedFor, page = 1, limit = 12 } = options;
 
+  // biome-ignore lint/suspicious/noExplicitAny: dynamic Prisma where object
   const where: Record<string, any> = {};
   if (authorId)
   {
@@ -68,7 +69,10 @@ export async function getChallenges(
       where: { userId: unsolvedFor },
       select: { challengeId: true },
     });
-    where.id = { notIn: solved.map((s) => s.challengeId) };
+    if (solved.length > 0)
+    {
+      where.id = { notIn: solved.map((s) => s.challengeId) };
+    }
     where.authorId = { not: unsolvedFor };
   }
 
@@ -191,6 +195,8 @@ export async function createAttempt
             id: true,
             authorId: true,
             secretRegex: true,
+            positiveExample: true,
+            negativeExample: true,
             positiveControls: true,
             negativeControls: true,
         },
@@ -230,47 +236,53 @@ export async function createAttempt
 
     const totalPositive = challenge.positiveControls.length;
     const totalNegative = challenge.negativeControls.length;
-    const isCorrect = positiveMatches === totalPositive && negativeMatches === 0;
 
-    await prisma.attempt.create({
-        data: {
-            proposedRegex,
-            positiveMatches,
-            negativeMatches,
-            totalPositive,
-            totalNegative,
-            isCorrect,
-            userId,
-            challengeId,
-        },
-    });
+    const matchesPublicPositive = regex.test(challenge.positiveExample);
+    const matchesPublicNegative = regex.test(challenge.negativeExample);
 
-    if(isCorrect)
-    {
-        const alreadySolved = await prisma.solvedChallenge.findUnique
-        ({
-            where: { challengeId_userId: { challengeId, userId } },
+    const isCorrect = positiveMatches === totalPositive && negativeMatches === 0 && matchesPublicPositive && !matchesPublicNegative;
+
+    return await prisma.$transaction(async (tx) => {
+        await tx.attempt.create({
+            data: {
+                proposedRegex,
+                positiveMatches,
+                negativeMatches,
+                totalPositive,
+                totalNegative,
+                isCorrect,
+                userId,
+                challengeId,
+            },
         });
 
-        if(!alreadySolved)
+        if(isCorrect)
         {
-            const attemptCount = await prisma.attempt.count
+            const alreadySolved = await tx.solvedChallenge.findUnique
             ({
-                where: { userId, challengeId, isCorrect: false },
+                where: { challengeId_userId: { challengeId, userId } },
             });
 
-            await prisma.solvedChallenge.create
-            ({
-                data: {
-                    userId,
-                    challengeId,
-                    attemptsUsed: attemptCount + 1,
-                },
-            });
+            if(!alreadySolved)
+            {
+                const attemptCount = await tx.attempt.count
+                ({
+                    where: { userId, challengeId, isCorrect: false },
+                });
+
+                await tx.solvedChallenge.create
+                ({
+                    data: {
+                        userId,
+                        challengeId,
+                        attemptsUsed: attemptCount + 1,
+                    },
+                });
+            }
         }
-    }
 
-    return { positiveMatches, negativeMatches, totalPositive, totalNegative, isCorrect };
+        return { positiveMatches, negativeMatches, totalPositive, totalNegative, isCorrect };
+    });
 }
 
 export interface AttemptResponse

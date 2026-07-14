@@ -255,10 +255,10 @@ export class ChallengeCreatePage
       positiveControls: string[];
       negativeControls: string[];
     } = {
-      title: this.title(),
-      secretRegex: this.regex(),
-      positiveExample: this.positiveExample(),
-      negativeExample: this.negativeExample(),
+      title: this.title().trim(),
+      secretRegex: this.regex().trim(),
+      positiveExample: this.positiveExample().trim(),
+      negativeExample: this.negativeExample().trim(),
       positiveControls: pos,
       negativeControls: neg,
     };

@@ -2,8 +2,8 @@ import { z } from "zod";
 
 export const updateProfileSchema = z.object
 ({
-  username: z.string().min(4, "Lo username deve avere almeno 4 caratteri").optional(),
-  email: z.email("Email non valida").optional(),
+  username: z.string().min(4, "Lo username deve avere almeno 4 caratteri").max(20, "Lo username non può superare i 20 caratteri").trim().toLowerCase().optional(),
+  email: z.email("Email non valida").trim().toLowerCase().optional(),
 }).refine((data) => data.username || data.email,
 {
   message: "Almeno un campo tra username e email è richiesto",

@@ -114,7 +114,7 @@
                 @if (getAvatarUrl(challenge.author.avatar); as avatarUrl) {
                   <img [src]="avatarUrl" [alt]="challenge.author.username" class="avatar-sm" />
                 } @else {
-                  <span class="avatar-placeholder-sm">
+                  <span class="avatar-placeholder-sm" role="img" [attr.aria-label]="'Avatar di ' + challenge.author.username">
                     {{ challenge.author.username[0] }}
                   </span>
                 }

@@ -29,7 +29,9 @@ export interface UserResponse
 
 export async function login(data: LoginInput): Promise<AuthResponse>
 {
-	const user = await prisma.user.findUnique({ where: { username: data.username } });
+	const user = await prisma.user.findFirst({
+		where: { username: { equals: data.username, mode: 'insensitive' } },
+	});
 
 	if(!user)
 		throw new Error("Credenziali errate");

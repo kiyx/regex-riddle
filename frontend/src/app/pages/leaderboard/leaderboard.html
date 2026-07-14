@@ -40,10 +40,10 @@
         <table class="leaderboard__table">
           <thead>
             <tr class="leaderboard__table-row">
-              <th class="leaderboard__table-header leaderboard__table-header--rank">#</th>
-              <th class="leaderboard__table-header">Giocatore</th>
-              <th class="leaderboard__table-header leaderboard__table-header--stat">Risolte</th>
-              <th class="leaderboard__table-header leaderboard__table-header--avg">Media Tentativi</th>
+              <th class="leaderboard__table-header leaderboard__table-header--rank" scope="col">#</th>
+              <th class="leaderboard__table-header" scope="col">Giocatore</th>
+              <th class="leaderboard__table-header leaderboard__table-header--stat" scope="col">Risolte</th>
+              <th class="leaderboard__table-header leaderboard__table-header--avg" scope="col">Media Tentativi</th>
             </tr>
           </thead>
           <tbody>
@@ -66,7 +66,7 @@
                     @if (getAvatarUrl(entry.avatar); as avatarUrl) {
                       <img [src]="avatarUrl" [alt]="entry.username" class="avatar-img" />
                     } @else {
-                      <span class="avatar-placeholder">
+                      <span class="avatar-placeholder" role="img" [attr.aria-label]="'Avatar di ' + entry.username">
                         {{ entry.username[0] }}
                       </span>
                     }

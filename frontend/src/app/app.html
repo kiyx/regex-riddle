@@ -72,7 +72,7 @@
         class="navbar__link"
         (click)="closeMobileMenu()"
       >
-        {{ auth.user()?.username || 'Profilo' }}
+        <span class="navbar__username">{{ auth.user()?.username || 'Profilo' }}</span>
       </a>
 
       <button type="button" class="btn btn--navbar-ghost btn--sm" (click)="logout()">

@@ -32,6 +32,9 @@ export class ChallengeDetailPage implements OnInit
   readonly attempts = signal<AttemptHistory[]>([]);
   readonly loadingHistory = signal(false);
 
+  readonly publicPosMatch = signal<boolean | null>(null);
+  readonly publicNegMatch = signal<boolean | null>(null);
+
   ngOnInit(): void
   {
     const id = this.route.snapshot.paramMap.get('id');
@@ -87,6 +90,29 @@ export class ChallengeDetailPage implements OnInit
     return this.attempts().some((a) => a.isCorrect);
   }
 
+  onRegexInputChange(): void
+  {
+    const input = this.regexInput().trim();
+    const c = this.challenge();
+    if (!input || !c)
+    {
+      this.publicPosMatch.set(null);
+      this.publicNegMatch.set(null);
+      return;
+    }
+    try
+    {
+      const r = new RegExp(input);
+      this.publicPosMatch.set(r.test(c.positiveExample));
+      this.publicNegMatch.set(r.test(c.negativeExample));
+    }
+    catch
+    {
+      this.publicPosMatch.set(null);
+      this.publicNegMatch.set(null);
+    }
+  }
+
   private validateGuessRegex(): string | null
   {
     const input = this.regexInput().trim();
@@ -118,7 +144,7 @@ export class ChallengeDetailPage implements OnInit
     this.guessing.set(true);
     this.result.set(null);
     this.guessError.set('');
-    this.api.attemptChallenge(c.id, { proposedRegex: this.regexInput() }).subscribe({
+    this.api.attemptChallenge(c.id, { proposedRegex: this.regexInput().trim() }).subscribe({
       next: (r) =>
       {
         this.result.set(r);

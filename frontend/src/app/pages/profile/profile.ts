@@ -87,6 +87,7 @@ export class ProfilePage implements OnInit
           email: profile.email,
           avatar: this.api.getAvatarUrl(profile.avatar),
         });
+        this.username.set(profile.username);
         this.email.set(profile.email);
         this.success.set('Profilo aggiornato con successo!');
         this.toast.show('Profilo aggiornato!', 'success');

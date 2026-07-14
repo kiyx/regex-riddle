@@ -4,21 +4,28 @@ import { expect, request, test  } from '@playwright/test';
 const API = 'http://localhost:8080';
 const PASS = 'TestPassword123!';
 
-async function signupUser(uid: string)
+function makeUsername(uid: string): string
 {
+  const shortUid = uid.replace(/-/g, '').slice(0, 10);
+  return `e2e${shortUid}`;
+}
+
+async function signupUser(uid: string): Promise<{ token: string; username: string }>
+{
+  const username = makeUsername(uid);
   const ctx = await request.newContext({ baseURL: API });
   const res = await ctx.post('/auth/signup', {
-    data: { username: `e2e${uid}`, email: `e2e${uid}@test.com`, password: PASS, confirmPassword: PASS },
+    data: { username, email: `${username}@test.com`, password: PASS, confirmPassword: PASS },
   });
   const responseText = await res.text();
   if (!res.ok() && !responseText.includes('già in uso'))
     throw new Error(`Signup failed: ${responseText}`);
   const login = await ctx.post('/auth/login', {
-    data: { username: `e2e${uid}`, password: PASS },
+    data: { username, password: PASS },
   });
   const body = await login.json() as { token: string };
   await ctx.dispose();
-  return body.token;
+  return { token: body.token, username };
 }
 
 async function setAuth(page: import('@playwright/test').Page, token: string, username: string)
@@ -40,29 +47,30 @@ test.describe('RegexRiddle E2E', () =>
   test('1. Registrazione nuovo utente via form', async ({ page }) =>
   {
     const uid = randomUUID();
+    const username = makeUsername(uid);
     await page.goto('/signup');
-    await page.fill('#username', `e2euser${uid}`);
-    await page.fill('#email', `e2e${uid}@test.com`);
+    await page.fill('#username', username);
+    await page.fill('#email', `${username}@test.com`);
     await page.fill('#password', PASS);
     await page.fill('#confirmPassword', PASS);
     await expect(page.locator('button[type="submit"]')).toBeEnabled();
     await page.locator('button[type="submit"]').click();
     await expect(page).toHaveURL(/.*dashboard/, { timeout: 30000 });
-    await expect(page.locator('header.navbar')).toContainText(`e2euser${uid}`);
+    await expect(page.locator('header.navbar')).toContainText(username);
   });
 
   /* ========== 2. Login e logout ========== */
   test('2. Login e logout', async ({ page }) =>
   {
     const uid = randomUUID();
-    await signupUser(uid);
+    const { username } = await signupUser(uid);
     await page.goto('/login');
-    await page.fill('#username', `e2e${uid}`);
+    await page.fill('#username', username);
     await page.fill('#password', PASS);
     await expect(page.locator('button[type="submit"]')).toBeEnabled();
     await page.locator('button[type="submit"]').click();
     await expect(page).toHaveURL(/.*dashboard/, { timeout: 30000 });
-    await expect(page.locator('header.navbar')).toContainText(`e2e${uid}`);
+    await expect(page.locator('header.navbar')).toContainText(username);
     await page.getByRole('button', { name: 'Esci' }).click();
     await expect(page.getByRole('link', { name: 'Accedi' }).first()).toBeVisible();
   });
@@ -72,7 +80,7 @@ test.describe('RegexRiddle E2E', () =>
   {
     await page.goto('/');
     await expect(page.locator('h1')).toContainText('Scopri il Pattern');
-    await expect(page.locator('main').getByRole('link', { name: 'Inizia Gratis' })).toBeVisible();
+    await expect(page.locator('main').getByRole('link', { name: 'Inizia' })).toBeVisible();
     await expect(page.locator('main').getByRole('link', { name: 'Accedi' })).toBeVisible();
   });
 
@@ -91,8 +99,8 @@ test.describe('RegexRiddle E2E', () =>
   test('5. Creazione sfida wizard a step', async ({ page }) =>
   {
     const uid = randomUUID();
-    const token = await signupUser(uid);
-    await setAuth(page, token, `e2e${uid}`);
+    const { token, username } = await signupUser(uid);
+    await setAuth(page, token, username);
     await page.goto('/challenges/create');
     await page.waitForSelector('#title', { state: 'visible' });
     await page.fill('#title', 'E2E Test Vocali');
@@ -119,8 +127,8 @@ test.describe('RegexRiddle E2E', () =>
   test('6. Dettaglio sfida mostra esempi e stato non risolto', async ({ page }) =>
   {
     const uid = randomUUID();
-    const token = await signupUser(uid);
-    await setAuth(page, token, `e2e${uid}`);
+    const { token, username } = await signupUser(uid);
+    await setAuth(page, token, username);
     await page.goto('/challenges/create');
     await page.waitForSelector('#title', { state: 'visible' });
     await page.fill('#title', 'E2E Detail');
@@ -154,7 +162,7 @@ test.describe('RegexRiddle E2E', () =>
   {
     const uidA = randomUUID();
     const uidB = randomUUID();
-    const tokenA = await signupUser(uidA);
+    const { token: tokenA } = await signupUser(uidA);
 
     const createRes = await request.post(`${API}/challenges`, {
       headers: { Authorization: `Bearer ${tokenA}` },
@@ -169,8 +177,8 @@ test.describe('RegexRiddle E2E', () =>
     });
     const challenge = await createRes.json() as { id: string };
 
-    const tokenB = await signupUser(uidB);
-    await setAuth(page, tokenB, `e2e${uidB}`);
+    const { token: tokenB, username: usernameB } = await signupUser(uidB);
+    await setAuth(page, tokenB, usernameB);
     await page.goto(`/challenges/${challenge.id}`);
     await page.fill('#guess-input', '^[a-z]+$');
     await page.locator('#guess-input').press('Tab');
@@ -185,7 +193,7 @@ test.describe('RegexRiddle E2E', () =>
   {
     const uidA = randomUUID();
     const uidB = randomUUID();
-    const tokenA = await signupUser(uidA);
+    const { token: tokenA } = await signupUser(uidA);
 
     const createRes = await request.post(`${API}/challenges`, {
       headers: { Authorization: `Bearer ${tokenA}` },
@@ -200,13 +208,13 @@ test.describe('RegexRiddle E2E', () =>
     });
     const challenge = await createRes.json() as { id: string };
 
-    const tokenB = await signupUser(uidB);
+    const { token: tokenB, username: usernameB } = await signupUser(uidB);
     await request.post(`${API}/challenges/${challenge.id}/attempt`, {
       headers: { Authorization: `Bearer ${tokenB}` },
       data: { proposedRegex: '^hello$' },
     });
 
-    await setAuth(page, tokenB, `e2e${uidB}`);
+    await setAuth(page, tokenB, usernameB);
     await page.goto(`/challenges/${challenge.id}`);
     await expect(page.getByText('Hai risolto questa sfida!')).toBeVisible();
     await expect(page.locator('#guess-input')).not.toBeVisible();
@@ -247,10 +255,10 @@ test.describe('RegexRiddle E2E', () =>
   test('10. Profilo utente mostra dati personali', async ({ page }) =>
   {
     const uid = randomUUID();
-    const token = await signupUser(uid);
-    await setAuth(page, token, `e2e${uid}`);
+    const { token, username } = await signupUser(uid);
+    await setAuth(page, token, username);
     await page.goto('/profile');
     await expect(page.getByRole('heading', { name: /Impostazioni Account/i })).toBeVisible();
-    await expect(page.getByText(`e2e${uid}`)).toBeVisible();
+    await expect(page.getByText(username)).toBeVisible();
   });
 });

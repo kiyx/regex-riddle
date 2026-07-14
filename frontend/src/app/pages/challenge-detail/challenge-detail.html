@@ -90,7 +90,7 @@
                     class="input input--mono input-flex"
                     placeholder="es. ^[aeiou]+$"
                     [ngModel]="regexInput()"
-                    (ngModelChange)="regexInput.set($event)"
+                    (ngModelChange)="regexInput.set($event); onRegexInputChange()"
                     name="guess"
                   />
                   <button type="submit" class="btn btn--primary" [disabled]="guessing() || !regexInput().trim()">
@@ -101,6 +101,19 @@
                     }
                   </button>
                 </div>
+
+                @if (publicPosMatch() !== null && publicNegMatch() !== null) {
+                  <div class="public-checks">
+                    <div class="public-check" [class.public-check--ok]="publicPosMatch()">
+                      <span class="public-check__icon">{{ publicPosMatch() ? '✅' : '❌' }}</span>
+                      <span>{{ publicPosMatch() ? 'Matcha l\'esempio positivo' : 'NON matcha l\'esempio positivo' }}</span>
+                    </div>
+                    <div class="public-check" [class.public-check--ok]="!publicNegMatch()">
+                      <span class="public-check__icon">{{ !publicNegMatch() ? '✅' : '❌' }}</span>
+                      <span>{{ !publicNegMatch() ? 'Rifiuta l\'esempio negativo' : 'Accetta l\'esempio negativo (errore!)' }}</span>
+                    </div>
+                  </div>
+                }
               </form>
 
               @if (guessError()) {

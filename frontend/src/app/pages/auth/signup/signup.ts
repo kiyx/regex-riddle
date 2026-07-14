@@ -31,8 +31,8 @@ export class SignupPage
 
   onSubmit(): void
   {
-    const username = this.username().trim();
-    const email = this.email().trim();
+    const username = this.username().trim().toLowerCase();
+    const email = this.email().trim().toLowerCase();
     const password = this.password();
     const confirmPassword = this.confirmPassword();
 
@@ -41,9 +41,14 @@ export class SignupPage
       this.error.set('Lo username deve avere almeno 4 caratteri');
       return;
     }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+    if (username.length > 20)
     {
-      this.error.set('Email non valida');
+      this.error.set('Lo username non può superare i 20 caratteri');
+      return;
+    }
+    if (!email)
+    {
+      this.error.set('Email obbligatoria');
       return;
     }
     if (password.length < 8)

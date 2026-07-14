@@ -28,9 +28,20 @@ export class LoginPage
 
   onSubmit(): void
   {
+    const username = this.username().trim();
+    if (username.length < 4)
+    {
+      this.error.set('Lo username deve avere almeno 4 caratteri');
+      return;
+    }
+    if (username.length > 20)
+    {
+      this.error.set('Lo username non può superare i 20 caratteri');
+      return;
+    }
     this.error.set('');
     this.loading.set(true);
-    this.auth.login(this.username().trim(), this.password()).subscribe({
+    this.auth.login(username, this.password()).subscribe({
       next: () =>
       {
         this.router.navigate(['/dashboard']);

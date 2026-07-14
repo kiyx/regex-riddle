@@ -703,6 +703,40 @@
   gap: var(--space-3);
 }
 
+.public-checks
+{
+  margin-top: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.public-check
+{
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  background: rgba(196, 92, 92, 0.08);
+  border: 1px solid var(--neon-magenta);
+  font-size: 0.85rem;
+  color: var(--ink-light);
+  transition: all 0.2s ease;
+}
+
+.public-check--ok
+{
+  background: rgba(57, 255, 20, 0.08);
+  border-color: var(--neon-green);
+}
+
+.public-check__icon
+{
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
 @media (max-width: 768px)
 {
   .detail__grid

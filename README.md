@@ -34,14 +34,29 @@ DISABLE_RATE_LIMIT=false
 
 > **Nota:** il progetto include un `.npmrc` con `legacy-peer-deps=true` per evitare conflitti di peer dependencies su versioni diverse di npm.
 
-### 2. Migrazioni e seed
+### 2. Migrazioni Prisma
+
+Le migrazioni sono già incluse nel repository (`backend/prisma/migrations/`).
+Chiunque cloni il progetto deve eseguire i seguenti comandi **una sola volta** dopo aver configurato il database:
 
 ```bash
 cd backend
 npm install
-npx prisma generate      # genera il client Prisma
-npx prisma migrate dev --name init
+npx prisma generate        # genera il client TypeScript per Prisma
+npx prisma migrate deploy  # applica le migrazioni esistenti sul database
 ```
+
+| Comando                 | Cosa fa                                                                                                                                    | Quando serve                                                                        |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------- |
+| `prisma generate`       | Legge `schema.prisma` e crea il client TypeScript in `node_modules/.prisma/client/`. Senza questo il backend non può usare `PrismaClient`. | **Sempre**, dopo ogni `npm install` o modifica a `schema.prisma`.                   |
+| `prisma migrate deploy` | Legge i file SQL nelle cartelle `prisma/migrations/` ed esegue le istruzioni sul database PostgreSQL per creare le tabelle.                | **Sempre la prima volta**, anche se le migrazioni sono già presenti nel repository. |
+
+> **Nota:** le migrazioni nel repository sono solo file SQL. Il database PostgreSQL dell'altro utente è vuoto e deve ricevere le istruzioni per creare le tabelle. `migrate deploy` fa esattamente questo.
+
+> **Per chi modifica lo schema (`schema.prisma`)** e vuole creare una nuova migrazione:
+> ```bash
+> npx prisma migrate dev --name nome_migration
+> ```
 
 ---
 
@@ -95,6 +110,13 @@ Altri script utili nel front-end:
 ```bash
 npm run build        # build di produzione
 npm run lint         # linting con Biome
+```
+
+Per servire il frontend in modalità produzione dopo la build:
+
+```bash
+npm run build
+npx serve -s dist/frontend/browser -l 4200
 ```
 
 ---
