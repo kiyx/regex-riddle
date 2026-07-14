@@ -8,9 +8,9 @@
 
 ---
 
-## Configurazione
+# Configurazione
 
-### 1. Database
+## Database (QUESTA PARTE NON VA FATTA SE IL SUO COGNOME è STARACE, HO MESSO IO IL .env NELLA CONSEGNA PERCHè USO DB ESTERNO ;) )
 
 Creare un database PostgreSQL e copiare il file di esempio:
 
@@ -34,19 +34,6 @@ DISABLE_RATE_LIMIT=false
 
 > **Nota:** il progetto include un `.npmrc` con `legacy-peer-deps=true` per evitare conflitti di peer dependencies su versioni diverse di npm.
 
-### 2. Migrazioni Prisma
-
-Le migrazioni sono già incluse nel repository (`backend/prisma/migrations/`).
-Chiunque cloni il progetto deve eseguire i seguenti comandi **una sola volta** dopo aver configurato il database:
-
-```bash
-cd backend
-npm install
-npx prisma generate        # genera il client TypeScript per Prisma
-npx prisma migrate deploy  # applica le migrazioni esistenti sul database
-```
----
-
 ## Avvio
 
 ### Back-end
@@ -56,9 +43,11 @@ npx prisma migrate deploy  # applica le migrazioni esistenti sul database
 ```bash
 cd backend
 npm install
+npx prisma generate
+npx prisma migrate deploy
 ```
 
-2. Avvia in modalità sviluppo (hot-reload):
+1. Avvia in modalità sviluppo:
 
 ```bash
 npm run dev
@@ -98,13 +87,6 @@ npx serve -s dist/frontend/browser -l 4200
 ```
 
 L'applicazione sarà disponibile su `http://localhost:4200`.
-
-Altri script utili nel front-end:
-
-```bash
-npm run build        # build di produzione
-npm run lint         # linting con Biome
-```
 
 ---
 
