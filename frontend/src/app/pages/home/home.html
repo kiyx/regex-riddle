@@ -1,0 +1,101 @@
+<section class="hero">
+  <div class="hero__parchment parchment-reveal">
+    <div class="hero__parchment-roll"></div>
+    <div class="hero__parchment-content">
+      <span class="hero__badge badge badge--sage">Il gioco di enigmi regex</span>
+
+      <h1 class="hero__title font-scroll">
+        Scopri il Pattern.<br />
+        <em class="hero__title-accent">Dimostra la tua Logica.</em>
+      </h1>
+
+      <p class="hero__subtitle">
+        Crea enigmi regex segreti o risolvi quelli proposti dalla comunità.
+        Ogni sfida mette alla prova la tua intuizione.
+      </p>
+
+      <div class="hero__actions">
+        @if (auth.isAuthenticated()) {
+          <a routerLink="/dashboard" class="btn btn--primary btn--lg">
+            Vai alla Bacheca
+            <span>→</span>
+          </a>
+        } @else {
+          <a routerLink="/signup" class="btn btn--primary btn--lg">
+            Inizia Gratis
+            <span>→</span>
+          </a>
+          <a routerLink="/login" class="btn btn--ghost btn--lg">
+            Accedi
+          </a>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="hero__landscape">
+    <div class="hero__hill hero__hill--back"></div>
+    <div class="hero__hill hero__hill--mid"></div>
+    <div class="hero__hill hero__hill--front"></div>
+  </div>
+</section>
+
+<section class="features">
+  <div class="container">
+    <div class="section-header fade-in-up">
+      <h2 class="section-header__title font-scroll">Come funziona</h2>
+      <div class="divider--ornament">
+        <div class="divider--ornament__center"></div>
+      </div>
+      <p class="section-header__subtitle">Tre semplici passi per la maestria</p>
+    </div>
+
+    <div class="features__grid">
+      <div class="scroll-card fade-in-up">
+        <div class="scroll-card__seal">I</div>
+        <h3 class="scroll-card__title">Crea o Sfoglia</h3>
+        <p class="scroll-card__meta">
+          Disegna un enigma regex con stringhe di controllo segrete, o scegli tra le sfide create dalla comunità.
+        </p>
+      </div>
+
+      <div class="scroll-card fade-in-up" style="animation-delay: 0.1s">
+        <div class="scroll-card__seal">II</div>
+        <h3 class="scroll-card__title">Invia la Regex</h3>
+        <p class="scroll-card__meta">
+          Scrivi un'espressione regolare che matcha le stesse stringe di quella nascosta. Il sistema verifica istantaneamente.
+        </p>
+      </div>
+
+      <div class="scroll-card fade-in-up" style="animation-delay: 0.2s">
+        <div class="scroll-card__seal">III</div>
+        <h3 class="scroll-card__title">Scala la Classifica</h3>
+        <p class="scroll-card__meta">
+          Viene classificato per sfide risolte e media tentativi. Meno tentativi = posizione più alta.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="container">
+    <div class="form-parchment fade-in-up text-center">
+      <h2 class="font-scroll cta-title">
+        Pronto a mettere alla prova le tue abilità?
+      </h2>
+      <p class="cta-desc">
+        Unisciti alla comunità di chi sa decifrare i pattern.
+      </p>
+      @if (!auth.isAuthenticated()) {
+        <a routerLink="/signup" class="btn btn--carved btn--lg">
+          Crea Account Gratis
+        </a>
+      } @else {
+        <a routerLink="/dashboard" class="btn btn--carved btn--lg">
+          Vai alla Bacheca
+        </a>
+      }
+    </div>
+  </div>
+</section>

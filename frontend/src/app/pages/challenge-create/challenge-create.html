@@ -1,0 +1,277 @@
+<div class="page create">
+  <div class="container">
+    <div class="create__header fade-in-up">
+      <a routerLink="/dashboard" class="back-link">← Torna alla Bacheca</a>
+      <h1 class="create__hero-title">Crea una Sfida</h1>
+      <p class="create__hero-subtitle">
+        Disegna il tuo enigma regex. Fornisci esempi e stringhe di controllo segrete che i risolutori dovranno indovinare.
+      </p>
+    </div>
+
+    @if (success()) {
+      <div class="create__success card fade-in-up">
+        <div class="create__success-burst">
+        <span class="create__success-icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--sage-500)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+        </span>
+        </div>
+        <h3 class="create__success-title">Sfida Creata!</h3>
+        <p class="text-secondary">Reindirizzamento alla tua sfida...</p>
+        <div class="create__success-bar">
+          <div class="create__success-bar-fill"></div>
+        </div>
+      </div>
+    } @else {
+      <div class="create__progress fade-in-up">
+        <div class="create__progress-track">
+          @for (s of steps; track s.id; let i = $index) {
+            <div class="create__step" [class.create__step--active]="currentStep() >= i" [class.create__step--current]="currentStep() === i">
+              <div class="create__step-bubble">
+                @if (currentStep() > i) {
+                  <span>✓</span>
+                } @else {
+                  <span>{{ i + 1 }}</span>
+                }
+              </div>
+              <span class="create__step-label">{{ s.label }}</span>
+            </div>
+            @if (i + 1 !== steps.length) {
+              <div class="create__step-line" [class.create__step-line--active]="currentStep() > i"></div>
+            }
+          }
+        </div>
+      </div>
+
+      <form class="create__form card fade-in-up" (submit)="$event.preventDefault(); submit()">
+        @if (currentStep() === 0) {
+          <div class="create__step-panel fade-in-up">
+            <h2 class="create__step-title">Informazioni Base</h2>
+            <p class="create__step-desc">Dai un nome e una descrizione alla tua sfida.</p>
+
+            <div class="form-group">
+              <label class="form-label" for="title">Titolo <span class="text-accent">*</span></label>
+              <input
+                id="title"
+                type="text"
+                class="form-input"
+                placeholder="es. Solo vocali ammesse"
+                [ngModel]="title()"
+                (ngModelChange)="title.set($event)"
+                name="title"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="desc">Descrizione (opzionale)</label>
+              <textarea
+                id="desc"
+                class="form-input form-textarea"
+                placeholder="Descrivi la sfida, dai indizi..."
+                rows="3"
+                [ngModel]="description()"
+                (ngModelChange)="description.set($event)"
+                name="description"
+              ></textarea>
+            </div>
+
+            <div class="create__nav">
+              <button type="button" class="btn btn--primary" (click)="nextStep()">
+                Avanti →
+              </button>
+            </div>
+          </div>
+        }
+
+        @if (currentStep() === 1) {
+          <div class="create__step-panel fade-in-up">
+            <h2 class="create__step-title">Regex Segreta</h2>
+            <p class="create__step-desc">Inserisci la regex che i giocatori dovranno indovinare. Rimane nascosta!</p>
+
+            <div class="form-group">
+              <label class="form-label" for="regex">Espressione Regolare <span class="text-accent">*</span></label>
+              <div class="create__regex-input">
+                <span class="create__regex-prefix">/</span>
+                <input
+                  id="regex"
+                  type="text"
+                  class="form-input form-input--mono"
+                  placeholder="es. ^[aeiou]+$"
+                  [ngModel]="regex()"
+                  (ngModelChange)="regex.set($event)"
+                  name="regex"
+                  required
+                />
+                <span class="create__regex-suffix">/</span>
+              </div>
+              <p class="form-hint">Deve essere valida e non contenere lookbehind o espressioni non supportate.</p>
+            </div>
+
+            <div class="create__nav">
+              <button type="button" class="btn btn--ghost" (click)="prevStep()">← Indietro</button>
+              <button type="button" class="btn btn--primary" (click)="nextStep()">Avanti →</button>
+            </div>
+          </div>
+        }
+
+        @if (currentStep() === 2) {
+          <div class="create__step-panel fade-in-up">
+            <h2 class="create__step-title">Esempi Pubblici</h2>
+            <p class="create__step-desc">Mostra ai risolutori un esempio che matcha e uno che non matcha.</p>
+
+            <div class="create__examples-row">
+              <div class="create__example-box create__example-box--pos">
+                <div class="create__example-label create__example-label--pos">Matcha</div>
+                <input
+                  type="text"
+                  class="form-input form-input--mono"
+                  placeholder="es. aeiou"
+                  [ngModel]="positiveExample()"
+                  (ngModelChange)="positiveExample.set($event)"
+                  name="positiveExample"
+                  required
+                />
+                <p class="form-hint">Questa stringa DEVE soddisfare la regex segreta.</p>
+              </div>
+
+              <div class="create__example-divider">
+                <span class="create__vs">VS</span>
+              </div>
+
+              <div class="create__example-box create__example-box--neg">
+                <div class="create__example-label create__example-label--neg">Non Matcha</div>
+                <input
+                  type="text"
+                  class="form-input form-input--mono"
+                  placeholder="es. hello123"
+                  [ngModel]="negativeExample()"
+                  (ngModelChange)="negativeExample.set($event)"
+                  name="negativeExample"
+                  required
+                />
+                <p class="form-hint">Questa stringa NON DEVE soddisfare la regex segreta.</p>
+              </div>
+            </div>
+
+            <div class="create__nav">
+              <button type="button" class="btn btn--ghost" (click)="prevStep()">← Indietro</button>
+              <button type="button" class="btn btn--primary" (click)="nextStep()">Avanti →</button>
+            </div>
+          </div>
+        }
+
+        @if (currentStep() === 3) {
+          <div class="create__step-panel fade-in-up">
+            <h2 class="create__step-title">Stringhe di Controllo</h2>
+            <p class="create__step-desc">
+              Queste <strong>rimangono segrete</strong> e servono al sistema per validare le risposte.
+              Aggiungi 1–10 per categoria.
+            </p>
+
+            <div class="controls-group">
+              <div class="controls-group__header">
+                <label class="form-label">Positive (matcha la regex)</label>
+                <span class="controls-group__count">{{ positiveControls().filter(l => l.trim()).length }}/10</span>
+              </div>
+              <div class="controls-group__chips">
+                @for (ctrl of positiveControls(); track trackPosCtrl(i); let i = $index) {
+                  <div class="controls-group__chip" [class.controls-group__chip--filled]="ctrl.trim()">
+                    <span class="controls-group__chip-num">{{ i + 1 }}</span>
+                    <input
+                      type="text"
+                      class="controls-group__chip-input"
+                      placeholder="+"
+                      [value]="ctrl"
+                      (input)="updatePositiveControl(i, $event)"
+                    />
+                    @if (positiveControls().length > 1) {
+                      <button
+                        type="button"
+                        class="controls-group__chip-remove"
+                        (click)="removePositiveControl(i)"
+                        title="Rimuovi"
+                      >
+                        ✕
+                      </button>
+                    }
+                  </div>
+                }
+                @if (positiveControls().length !== 10) {
+                  <button type="button" class="controls-group__add-btn" (click)="addPositiveControl()">
+                    + Aggiungi
+                  </button>
+                }
+              </div>
+            </div>
+
+            <div class="controls-group">
+              <div class="controls-group__header">
+                <label class="form-label">Negative (non matcha)</label>
+                <span class="controls-group__count">{{ negativeControls().filter(l => l.trim()).length }}/10</span>
+              </div>
+              <div class="controls-group__chips">
+                @for (ctrl of negativeControls(); track trackNegCtrl(i); let i = $index) {
+                  <div class="controls-group__chip" [class.controls-group__chip--filled]="ctrl.trim()">
+                    <span class="controls-group__chip-num">{{ i + 1 }}</span>
+                    <input
+                      type="text"
+                      class="controls-group__chip-input"
+                      placeholder="-"
+                      [value]="ctrl"
+                      (input)="updateNegativeControl(i, $event)"
+                    />
+                    @if (negativeControls().length > 1) {
+                      <button
+                        type="button"
+                        class="controls-group__chip-remove"
+                        (click)="removeNegativeControl(i)"
+                        title="Rimuovi"
+                      >
+                        ✕
+                      </button>
+                    }
+                  </div>
+                }
+                @if (negativeControls().length !== 10) {
+                  <button type="button" class="controls-group__add-btn" (click)="addNegativeControl()">
+                    + Aggiungi
+                  </button>
+                }
+              </div>
+            </div>
+
+            <div class="create__nav">
+              <button type="button" class="btn btn--ghost" (click)="prevStep()">← Indietro</button>
+              <button
+                type="submit"
+                class="btn btn--primary btn--lg"
+                [disabled]="submitting()"
+              >
+                @if (submitting()) {
+                  <span class="spinner spinner--small"></span>
+                  <span>Pubblicazione...</span>
+                } @else {
+                  <span>Pubblica Sfida</span>
+                }
+              </button>
+            </div>
+          </div>
+        }
+
+        @if (error()) {
+          <div class="form-error fade-in-up">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+            <span>{{ error() }}</span>
+          </div>
+        }
+      </form>
+    }
+  </div>
+</div>

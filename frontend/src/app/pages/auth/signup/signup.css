@@ -1,0 +1,57 @@
+.field
+{
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-4);
+}
+
+.field--lg
+{
+  margin-bottom: var(--space-5);
+}
+
+.input-wrapper
+{
+  position: relative;
+}
+
+.input--password
+{
+  padding-right: 2.5rem;
+}
+
+.password-toggle
+{
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  color: var(--text-muted);
+}
+
+.auth-header__title
+{
+  font-size: 1.75rem;
+  margin-bottom: var(--space-2);
+}
+
+.auth-form
+{
+  margin-top: var(--space-6);
+}
+
+.auth-footer
+{
+  margin-top: var(--space-5);
+  color: var(--text-muted);
+}
+
+.auth-footer a
+{
+  font-weight: 700;
+}

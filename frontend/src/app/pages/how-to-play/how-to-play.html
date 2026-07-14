@@ -1,0 +1,212 @@
+<div class="page">
+  <div class="container">
+    <div class="fade-in-up howto__page-header">
+      <h1 class="font-scroll howto__page-title">Come si gioca</h1>
+      <div class="divider--ornament howto__ornament">
+        <div class="divider--ornament__center"></div>
+      </div>
+      <p class="text-secondary">Impara l'arte degli enigmi regex in pochi minuti</p>
+    </div>
+
+    <div class="fade-in-up howto__tab-bar">
+      <button type="button" class="btn howto__tab-btn" [class.btn--primary]="activeTab() === 0" [class.btn--ghost]="activeTab() !== 0" (click)="setTab(0)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+        Cos'&egrave;?
+      </button>
+      <button type="button" class="btn howto__tab-btn" [class.btn--primary]="activeTab() === 1" [class.btn--ghost]="activeTab() !== 1" (click)="setTab(1)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        Creare
+      </button>
+      <button type="button" class="btn howto__tab-btn" [class.btn--primary]="activeTab() === 2" [class.btn--ghost]="activeTab() !== 2" (click)="setTab(2)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Risolvere
+      </button>
+      <button type="button" class="btn howto__tab-btn" [class.btn--primary]="activeTab() === 3" [class.btn--ghost]="activeTab() !== 3" (click)="setTab(3)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+        Classifica
+      </button>
+      <button type="button" class="btn howto__tab-btn" [class.btn--primary]="activeTab() === 4" [class.btn--ghost]="activeTab() !== 4" (click)="setTab(4)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        Regex 101
+      </button>
+    </div>
+
+    <div class="fade-in-up howto__content">
+      @switch (activeTab()) {
+        @case (0) {
+          <div class="card howto__card-content">
+            <div class="howto__card-header">
+              <div class="howto__card-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--sage-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+              </div>
+              <h3 class="font-scroll howto__card-title">Cos'&egrave; RegexRiddle?</h3>
+            </div>
+            <p class="text-secondary howto__card-text">
+              RegexRiddle &egrave; un gioco di enigmi in cui i giocatori creano e risolvono sfide basate su espressioni regolari. Una sfida consiste in una regex segreta nota solo all'autore, pi&ugrave; indizi pubblici.
+            </p>
+            <p class="text-muted howto__card-muted">
+              Come risolutore, cerchi di indovinare la regex esatta. Il sistema controlla la tua proposta contro le stringhe di controllo nascoste.
+            </p>
+            <div class="howto__dots">
+              <button type="button" (click)="setTab(0)" class="howto__dot howto__dot--active" aria-label="Cos'&egrave;?"></button>
+              <button type="button" (click)="setTab(1)" class="howto__dot" aria-label="Creare"></button>
+              <button type="button" (click)="setTab(2)" class="howto__dot" aria-label="Risolvere"></button>
+              <button type="button" (click)="setTab(3)" class="howto__dot" aria-label="Classifica"></button>
+              <button type="button" (click)="setTab(4)" class="howto__dot" aria-label="Regex 101"></button>
+            </div>
+          </div>
+        }
+        @case (1) {
+          <div class="card howto__card-content">
+            <div class="howto__card-header">
+              <div class="howto__card-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--sage-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              </div>
+              <h3 class="font-scroll howto__card-title">Creare una Sfida</h3>
+            </div>
+            <p class="text-secondary howto__card-text">
+              Quando crei una sfida, devi fornire un titolo, la regex segreta, un esempio positivo e uno negativo, pi&ugrave; fino a 10 stringhe di controllo positive e 10 negative.
+            </p>
+            <p class="text-muted howto__card-muted">
+              Solo tu conosci la regex segreta e le stringhe di controllo. Gli altri vedranno solo gli esempi pubblici e dovranno indovinare il pattern nascosto.
+            </p>
+            <div class="howto__dots">
+              <button type="button" (click)="setTab(0)" class="howto__dot" aria-label="Cos'&egrave;?"></button>
+              <button type="button" (click)="setTab(1)" class="howto__dot howto__dot--active" aria-label="Creare"></button>
+              <button type="button" (click)="setTab(2)" class="howto__dot" aria-label="Risolvere"></button>
+              <button type="button" (click)="setTab(3)" class="howto__dot" aria-label="Classifica"></button>
+              <button type="button" (click)="setTab(4)" class="howto__dot" aria-label="Regex 101"></button>
+            </div>
+          </div>
+        }
+        @case (2) {
+          <div class="card howto__card-content">
+            <div class="howto__card-header">
+              <div class="howto__card-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--sage-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              </div>
+              <h3 class="font-scroll howto__card-title">Risolvere una Sfida</h3>
+            </div>
+            <p class="text-secondary howto__card-text">
+              Scegli una sfida dalla bacheca. Vedrai titolo, descrizione, esempio positivo e negativo. Scrivi la tua regex proposta nel campo apposito.
+            </p>
+            <p class="text-muted howto__card-muted">
+              Vinci quando la tua regex matcha TUTTE le stringhe positive e ZERO negative tra quelle nascoste. La cronologia mostra i tuoi tentativi.
+            </p>
+            <div class="howto__dots">
+              <button type="button" (click)="setTab(0)" class="howto__dot" aria-label="Cos'&egrave;?"></button>
+              <button type="button" (click)="setTab(1)" class="howto__dot" aria-label="Creare"></button>
+              <button type="button" (click)="setTab(2)" class="howto__dot howto__dot--active" aria-label="Risolvere"></button>
+              <button type="button" (click)="setTab(3)" class="howto__dot" aria-label="Classifica"></button>
+              <button type="button" (click)="setTab(4)" class="howto__dot" aria-label="Regex 101"></button>
+            </div>
+          </div>
+        }
+        @case (3) {
+          <div class="card howto__card-content">
+            <div class="howto__card-header">
+              <div class="howto__card-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--sage-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+              </div>
+              <h3 class="font-scroll howto__card-title">Classifica e Punteggio</h3>
+            </div>
+            <p class="text-secondary howto__card-text">
+              Ogni sfida risolta ti fa guadagnare un posto nella classifica. La classifica &egrave; ordinata per sfide risolte e media tentativi.
+            </p>
+            <p class="text-muted howto__card-muted">
+              Meno tentativi = posizione pi&ugrave; alta. Sfida te stesso a risolvere al primo colpo!
+            </p>
+            <div class="howto__dots">
+              <button type="button" (click)="setTab(0)" class="howto__dot" aria-label="Cos'&egrave;?"></button>
+              <button type="button" (click)="setTab(1)" class="howto__dot" aria-label="Creare"></button>
+              <button type="button" (click)="setTab(2)" class="howto__dot" aria-label="Risolvere"></button>
+              <button type="button" (click)="setTab(3)" class="howto__dot howto__dot--active" aria-label="Classifica"></button>
+              <button type="button" (click)="setTab(4)" class="howto__dot" aria-label="Regex 101"></button>
+            </div>
+          </div>
+        }
+        @case (4) {
+          <div class="card howto__card-content">
+            <div class="howto__card-header">
+              <div class="howto__card-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--sage-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+              </div>
+              <h3 class="font-scroll howto__card-title">Guida Rapida Regex</h3>
+            </div>
+            <p class="text-secondary" style="text-align: center; margin-bottom: var(--space-4)">Ecco i pattern pi&ugrave; comuni per iniziare:</p>
+            <div class="howto__table-wrapper">
+              <table class="howto__table">
+                <thead>
+                  <tr class="howto__table-header-row">
+                    <th class="howto__table-th">Pattern</th>
+                    <th class="howto__table-th">Significato</th>
+                    <th class="howto__table-th">Esempio</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="howto__table-row">
+                    <td class="howto__table-cell"><code class="howto__code howto__code--bg">^abc</code></td>
+                    <td class="howto__table-cell howto__table-cell--muted">Inizia con "abc"</td>
+                    <td class="howto__table-cell howto__table-cell--muted"><code class="howto__code">abc123</code></td>
+                  </tr>
+                  <tr class="howto__table-row">
+                    <td class="howto__table-cell"><code class="howto__code howto__code--bg">xyz$</code></td>
+                    <td class="howto__table-cell howto__table-cell--muted">Finisce con "xyz"</td>
+                    <td class="howto__table-cell howto__table-cell--muted"><code class="howto__code">testxyz</code></td>
+                  </tr>
+                  <tr class="howto__table-row">
+                    <td class="howto__table-cell"><code class="howto__code howto__code--bg">.</code></td>
+                    <td class="howto__table-cell howto__table-cell--muted">Qualsiasi carattere</td>
+                    <td class="howto__table-cell howto__table-cell--muted"><code class="howto__code">a, 1, @@</code></td>
+                  </tr>
+                  <tr class="howto__table-row">
+                    <td class="howto__table-cell"><code class="howto__code howto__code--bg">\d</code></td>
+                    <td class="howto__table-cell howto__table-cell--muted">Qualsiasi cifra</td>
+                    <td class="howto__table-cell howto__table-cell--muted"><code class="howto__code">5</code></td>
+                  </tr>
+                  <tr class="howto__table-row">
+                    <td class="howto__table-cell"><code class="howto__code howto__code--bg">+</code></td>
+                    <td class="howto__table-cell howto__table-cell--muted">Uno o pi&ugrave; del precedente</td>
+                    <td class="howto__table-cell howto__table-cell--muted"><code class="howto__code">\d+</code> matcha <code class="howto__code">42</code></td>
+                  </tr>
+                  <tr class="howto__table-row">
+                    <td class="howto__table-cell"><code class="howto__code howto__code--bg">*</code></td>
+                    <td class="howto__table-cell howto__table-cell--muted">Zero o pi&ugrave; del precedente</td>
+                    <td class="howto__table-cell howto__table-cell--muted"><code class="howto__code">a*</code> matcha <code class="howto__code">""</code></td>
+                  </tr>
+                  <tr class="howto__table-row">
+                    <td class="howto__table-cell"><code class="howto__code howto__code--bg">?</code></td>
+                    <td class="howto__table-cell howto__table-cell--muted">Zero o uno del precedente</td>
+                    <td class="howto__table-cell howto__table-cell--muted"><code class="howto__code">colou?r</code></td>
+                  </tr>
+                  <tr class="howto__table-row">
+                    <td class="howto__table-cell"><code class="howto__code howto__code--bg">|</code></td>
+                    <td class="howto__table-cell howto__table-cell--muted">OR (alternanza)</td>
+                    <td class="howto__table-cell howto__table-cell--muted"><code class="howto__code">cat|dog</code></td>
+                  </tr>
+                  <tr class="howto__table-row">
+                    <td class="howto__table-cell"><code class="howto__code howto__code--bg">[abc]</code></td>
+                    <td class="howto__table-cell howto__table-cell--muted">Qualsiasi carattere nel set</td>
+                    <td class="howto__table-cell howto__table-cell--muted"><code class="howto__code">[aeiou]</code></td>
+                  </tr>
+                  <tr class="howto__table-row">
+                    <td class="howto__table-cell"><code class="howto__code howto__code--bg">&#123;n&#125;</code></td>
+                    <td class="howto__table-cell howto__table-cell--muted">Esattamente n volte</td>
+                    <td class="howto__table-cell howto__table-cell--muted"><code class="howto__code">\d&#123;3&#125;</code></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="howto__dots">
+              <button type="button" (click)="setTab(0)" class="howto__dot" aria-label="Cos'&egrave;?"></button>
+              <button type="button" (click)="setTab(1)" class="howto__dot" aria-label="Creare"></button>
+              <button type="button" (click)="setTab(2)" class="howto__dot" aria-label="Risolvere"></button>
+              <button type="button" (click)="setTab(3)" class="howto__dot" aria-label="Classifica"></button>
+              <button type="button" (click)="setTab(4)" class="howto__dot howto__dot--active" aria-label="Regex 101"></button>
+            </div>
+          </div>
+        }
+      }
+    </div>
+  </div>
+</div>

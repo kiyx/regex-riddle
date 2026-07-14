@@ -1,0 +1,141 @@
+<div class="page page--narrow">
+  <div class="form-parchment fade-in-up">
+    <div class="auth-header text-center">
+      <span class="auth-header__seal">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--wood-400)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+          <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+          <line x1="12" y1="22.08" x2="12" y2="12"/>
+        </svg>
+      </span>
+      <h1 class="font-scroll auth-header__title">Unisciti al gioco</h1>
+      <p class="text-secondary">Crea il tuo account e inizia a risolvere.</p>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" #f="ngForm" class="auth-form">
+      @if (error()) {
+        <div class="alert alert--error scale-in">
+          {{ error() }}
+        </div>
+      }
+
+      <div class="field">
+        <label class="label" for="username">Username</label>
+        <input
+          id="username"
+          type="text"
+          class="input"
+          placeholder="RegexMaster99"
+          [(ngModel)]="username"
+          name="username"
+          required
+          minlength="3"
+          autocomplete="username"
+        />
+      </div>
+
+      <div class="field">
+        <label class="label" for="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          class="input"
+          placeholder="tu@esempio.com"
+          [(ngModel)]="email"
+          name="email"
+          required
+          autocomplete="email"
+        />
+      </div>
+
+      <div class="field">
+        <label class="label" for="password">Password</label>
+        <div class="input-wrapper">
+          <input
+            id="password"
+            [type]="showPassword() ? 'text' : 'password'"
+            class="input input--password"
+            placeholder="Min. 8 caratteri"
+            [(ngModel)]="password"
+            name="password"
+            required
+            minlength="8"
+            autocomplete="new-password"
+          />
+          <button
+            type="button"
+            class="password-toggle"
+            (click)="showPassword.set(!showPassword())"
+            [attr.aria-label]="showPassword() ? 'Nascondi password' : 'Mostra password'"
+          >
+            @if (showPassword()) {
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+                <line x1="1" y1="1" x2="23" y2="23"/>
+              </svg>
+            } @else {
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            }
+          </button>
+        </div>
+      </div>
+
+      <div class="field field--lg">
+        <label class="label" for="confirmPassword">Conferma Password</label>
+        <div class="input-wrapper">
+          <input
+            id="confirmPassword"
+            [type]="showConfirmPassword() ? 'text' : 'password'"
+            class="input input--password"
+            placeholder="Come sopra"
+            [(ngModel)]="confirmPassword"
+            name="confirmPassword"
+            required
+            autocomplete="new-password"
+          />
+          <button
+            type="button"
+            class="password-toggle"
+            (click)="showConfirmPassword.set(!showConfirmPassword())"
+            [attr.aria-label]="showConfirmPassword() ? 'Nascondi password' : 'Mostra password'"
+          >
+            @if (showConfirmPassword()) {
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+                <line x1="1" y1="1" x2="23" y2="23"/>
+              </svg>
+            } @else {
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            }
+          </button>
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        class="btn btn--primary btn--lg w-full"
+        [disabled]="loading() || !username() || !email() || !password() || !confirmPassword()"
+      >
+        @if (loading()) {
+          <span class="spinner spinner--small"></span>
+          Creazione account...
+        } @else {
+          Crea Account
+        }
+      </button>
+    </form>
+
+    <p class="text-sm text-center auth-footer">
+      Hai già un account?
+      <a routerLink="/login">Accedi</a>
+    </p>
+  </div>
+</div>

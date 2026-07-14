@@ -1,0 +1,141 @@
+<div class="page profile">
+  <div class="container">
+    @if (loading()) {
+      <div class="loading-center">
+        <div class="spinner spinner-center"></div>
+        <p class="text-muted">Caricamento profilo...</p>
+      </div>
+    } @else {
+      <a routerLink="/dashboard" class="back-link fade-in-up">← Torna alla Bacheca</a>
+
+      <div class="profile__grid">
+        <div class="card fade-in-up card--fit">
+          <div class="avatar-wrapper-lg">
+            @if (avatar(); as av) {
+              <img [src]="av" alt="Avatar" class="avatar-img--round" />
+            } @else {
+              <span class="avatar-placeholder--round">
+                {{ getInitial() }}
+              </span>
+            }
+            @if (uploading()) {
+              <div class="avatar-overlay">
+                <div class="spinner spinner--small"></div>
+              </div>
+            }
+          </div>
+          <label class="btn btn--ghost btn--sm profile__upload-btn">
+            {{ avatar() ? 'Cambia Foto' : 'Carica Foto' }}
+            <input type="file" accept="image/*" hidden (change)="onAvatarSelected($event)" />
+          </label>
+          <p class="text-sm text-muted member-since">
+            Membro dal {{ createdAt() | date: 'mediumDate' }}
+          </p>
+        </div>
+
+        <div class="card fade-in-up">
+          <h2 class="font-scroll profile__title">Impostazioni Account</h2>
+
+          @if (error()) {
+            <div class="alert alert--error alert-mb">
+              {{ error() }}
+            </div>
+          }
+          @if (success()) {
+            <div class="alert alert--success alert-mb">
+              {{ success() }}
+            </div>
+          }
+
+          <div class="form-group--mb">
+            <label class="label" for="username">Username</label>
+            <input id="username" type="text" class="input" [ngModel]="username()" (ngModelChange)="username.set($event)" name="username" />
+          </div>
+
+          <div class="form-group--lg">
+            <label class="label" for="email">Email</label>
+            <input id="email" type="email" class="input" [ngModel]="email()" (ngModelChange)="email.set($event)" name="email" />
+          </div>
+
+          <button type="button" class="btn btn--primary" [disabled]="saving()" (click)="saveProfile()">
+            @if (saving()) {
+              <span class="spinner spinner--small"></span>
+              Salvataggio...
+            } @else {
+              Salva Modifiche
+            }
+          </button>
+
+          <div class="divider divider--my"></div>
+
+          <button type="button" class="btn btn--ghost btn--sm" (click)="showPassword.set(!showPassword())">
+            {{ showPassword() ? 'Nascondi Cambio Password' : 'Cambia Password' }}
+          </button>
+
+          @if (showPassword()) {
+            <div class="fade-in-up" style="margin-top: var(--space-4)">
+              @if (passwordError()) {
+                <div class="alert alert--error alert-mb">
+                  {{ passwordError() }}
+                </div>
+              }
+              @if (passwordSuccess()) {
+                <div class="alert alert--success alert-mb">
+                  {{ passwordSuccess() }}
+                </div>
+              }
+
+              <div class="form-group--mb">
+                <label class="label">Password Attuale</label>
+                <div class="input-wrapper">
+                  <input [type]="showOldPassword() ? 'text' : 'password'" class="input input--password" [(ngModel)]="oldPassword" name="oldPassword" placeholder="••••••••" />
+                  <button type="button" class="password-toggle" (click)="showOldPassword.set(!showOldPassword())" [attr.aria-label]="showOldPassword() ? 'Nascondi password' : 'Mostra password'">
+                    @if (showOldPassword()) {
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                    } @else {
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    }
+                  </button>
+                </div>
+              </div>
+              <div class="form-group--mb">
+                <label class="label">Nuova Password</label>
+                <div class="input-wrapper">
+                  <input [type]="showNewPassword() ? 'text' : 'password'" class="input input--password" [(ngModel)]="newPassword" name="newPassword" placeholder="••••••••" />
+                  <button type="button" class="password-toggle" (click)="showNewPassword.set(!showNewPassword())" [attr.aria-label]="showNewPassword() ? 'Nascondi password' : 'Mostra password'">
+                    @if (showNewPassword()) {
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                    } @else {
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    }
+                  </button>
+                </div>
+              </div>
+              <div class="form-group--lg">
+                <label class="label">Conferma Nuova Password</label>
+                <div class="input-wrapper">
+                  <input [type]="showConfirmPassword() ? 'text' : 'password'" class="input input--password" [(ngModel)]="confirmPassword" name="confirmPassword" placeholder="••••••••" />
+                  <button type="button" class="password-toggle" (click)="showConfirmPassword.set(!showConfirmPassword())" [attr.aria-label]="showConfirmPassword() ? 'Nascondi password' : 'Mostra password'">
+                    @if (showConfirmPassword()) {
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                    } @else {
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    }
+                  </button>
+                </div>
+              </div>
+              <button type="button" class="btn btn--wood" [disabled]="savingPassword()" (click)="changePassword()">
+                @if (savingPassword()) {
+                  <span class="spinner spinner--small"></span>
+                  Aggiornamento...
+                } @else {
+                  Aggiorna Password
+                }
+              </button>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</div>

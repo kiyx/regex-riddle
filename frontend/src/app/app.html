@@ -1,0 +1,126 @@
+<a href="#main-content" class="skip-link">Vai al contenuto principale</a>
+
+<div class="ghibli-bg" aria-hidden="true">
+  <div class="ghibli-bg__sky"></div>
+  <div class="ghibli-bg__cloud ghibli-bg__cloud--1"></div>
+  <div class="ghibli-bg__cloud ghibli-bg__cloud--2"></div>
+  <div class="ghibli-bg__cloud ghibli-bg__cloud--3"></div>
+  <div class="ghibli-bg__mountain"></div>
+</div>
+
+<div class="leaf leaf--1" aria-hidden="true"></div>
+<div class="leaf leaf--2" aria-hidden="true"></div>
+<div class="leaf leaf--3" aria-hidden="true"></div>
+<div class="leaf leaf--4" aria-hidden="true"></div>
+
+<header class="navbar">
+  <a routerLink="/" class="navbar__brand" (click)="closeMobileMenu()">
+    <span class="navbar__brand-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--cream-100)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M11 20A7 7 0 0 1 9.8 6.5C13.3 3.5 20 2 20 2s-1.5 6.7-4.5 10.2A7 7 0 0 1 11 20Z"/>
+        <path d="M11 20a7 7 0 0 0 6.5-1.2c-2.4-1.6-3.5-4.3-3.5-6.8"/>
+      </svg>
+    </span>
+    <span class="navbar__brand-text">RegexRiddle</span>
+  </a>
+
+  <button
+    type="button"
+    class="navbar__burger"
+    [class.navbar__burger--open]="mobileMenuOpen()"
+    (click)="toggleMobileMenu()"
+    [attr.aria-label]="mobileMenuOpen() ? 'Chiudi menu' : 'Apri menu'"
+    [attr.aria-expanded]="mobileMenuOpen()"
+    aria-controls="main-nav"
+  >
+    <span></span><span></span><span></span>
+  </button>
+
+  <nav id="main-nav" class="navbar__nav" [class.navbar__nav--open]="mobileMenuOpen()">
+    <a
+      routerLink="/how-to-play"
+      routerLinkActive="navbar__link--active"
+      class="navbar__link"
+      (click)="closeMobileMenu()"
+    >
+      Come si gioca
+    </a>
+
+    @if (auth.isAuthenticated())
+    {
+      <a
+        routerLink="/dashboard"
+        routerLinkActive="navbar__link--active"
+        class="navbar__link"
+        (click)="closeMobileMenu()"
+      >
+        Bacheca
+      </a>
+
+      <a
+        routerLink="/leaderboard"
+        routerLinkActive="navbar__link--active"
+        class="navbar__link"
+        (click)="closeMobileMenu()"
+      >
+        Classifica
+      </a>
+
+      <a
+        routerLink="/profile"
+        routerLinkActive="navbar__link--active"
+        class="navbar__link"
+        (click)="closeMobileMenu()"
+      >
+        {{ auth.user()?.username || 'Profilo' }}
+      </a>
+
+      <button type="button" class="btn btn--navbar-ghost btn--sm" (click)="logout()">
+        Esci
+      </button>
+    }
+    @else
+    {
+      <a
+        routerLink="/login"
+        routerLinkActive="navbar__link--active"
+        class="navbar__link"
+        (click)="closeMobileMenu()"
+      >
+        Accedi
+      </a>
+
+      <a
+        routerLink="/signup"
+        routerLinkActive="navbar__link--active"
+        class="btn btn--primary btn--sm"
+        (click)="closeMobileMenu()"
+      >
+        Registrati
+      </a>
+    }
+  </nav>
+</header>
+
+<app-toast />
+
+<main id="main-content" class="main-content">
+  <div class="route-wrapper">
+    <router-outlet />
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="container footer__inner">
+    <div class="footer__left">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.6">
+        <path d="M11 20A7 7 0 0 1 9.8 6.5C13.3 3.5 20 2 20 2s-1.5 6.7-4.5 10.2A7 7 0 0 1 11 20Z"/>
+        <path d="M11 20a7 7 0 0 0 6.5-1.2c-2.4-1.6-3.5-4.3-3.5-6.8"/>
+      </svg>
+      <span class="footer__text">RegexRiddle &copy; {{ currentYear }}</span>
+    </div>
+    <div class="footer__right">
+      <span class="footer__tagline">Giuseppe Paolo Esposito - N86005174</span>
+    </div>
+  </div>
+</footer>

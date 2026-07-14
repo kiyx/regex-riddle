@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  username  String   @unique
+  email     String   @unique
+  password  String
+  avatar    String?
+
+  challenges       Challenge[]
+  attempts         Attempt[]
+  solvedChallenges SolvedChallenge[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Challenge {
+  id          String  @id @default(uuid())
+  title       String
+  description String?
+  secretRegex String
+
+  positiveExample String
+  negativeExample String
+
+  positiveControls String[]
+  negativeControls String[]
+
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  attempts Attempt[]
+  solvedBy SolvedChallenge[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([authorId])
+  @@map("challenges")
+}
+
+model Attempt {
+  id              String  @id @default(uuid())
+  proposedRegex   String
+  positiveMatches Int
+  negativeMatches Int
+  totalPositive   Int
+  totalNegative   Int
+  isCorrect       Boolean
+
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  challengeId String
+  challenge   Challenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+
+  attemptedAt DateTime @default(now())
+
+  @@index([challengeId, userId])
+  @@index([userId])
+  @@map("attempts")
+}
+
+model SolvedChallenge {
+  id           String @id @default(uuid())
+  attemptsUsed Int
+
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  challengeId String
+  challenge   Challenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+
+  solvedAt    DateTime @default(now())
+
+  @@unique([challengeId, userId])
+  @@index([userId])
+  @@map("solved_challenges")
+}

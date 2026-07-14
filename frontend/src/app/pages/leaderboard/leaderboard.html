@@ -1,0 +1,117 @@
+<div class="page leaderboard">
+  <div class="container">
+    <div class="fade-in-up leaderboard__header">
+      <a routerLink="/dashboard" class="back-link">← Indietro</a>
+      <h1 class="font-scroll leaderboard__header-title">Classifica</h1>
+      <p class="text-secondary">I migliori risolutori di regex, classificati per sfide risolte e media tentativi.</p>
+    </div>
+
+    @if (loading()) {
+      <div class="loading-center">
+        <div class="spinner spinner-center"></div>
+        <p class="text-muted">Caricamento classifica...</p>
+      </div>
+    } @else if (error()) {
+      <div class="form-parchment fade-in-up text-center error-pad">
+        <span class="error-icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--wood-400)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+        </span>
+        <h3 class="font-scroll">{{ error() }}</h3>
+        <a routerLink="/dashboard" class="btn btn--ghost btn--sm">← Torna alla Bacheca</a>
+      </div>
+    } @else if (entries().length === 0) {
+      <div class="form-parchment fade-in-up text-center empty-pad">
+        <span class="empty-icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--wood-400)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+        </span>
+        <h3 class="font-scroll empty-title">Classifica vuota</h3>
+        <p class="text-secondary empty-text">Sii il primo a risolvere una sfida!</p>
+        <a routerLink="/dashboard" class="btn btn--primary btn--sm">Sfoglia le Sfide</a>
+      </div>
+    } @else {
+      <div class="card fade-in-up card--table">
+        <table class="leaderboard__table">
+          <thead>
+            <tr class="leaderboard__table-row">
+              <th class="leaderboard__table-header leaderboard__table-header--rank">#</th>
+              <th class="leaderboard__table-header">Giocatore</th>
+              <th class="leaderboard__table-header leaderboard__table-header--stat">Risolte</th>
+              <th class="leaderboard__table-header leaderboard__table-header--avg">Media Tentativi</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (entry of entries(); track entry.username; let i = $index) {
+              <tr class="leaderboard__table-row" [class.leaderboard__table-row--top]="globalRank(i) <= 3">
+                <td class="leaderboard__table-cell leaderboard__table-cell--rank">
+                  @if (globalRank(i) === 1) {
+                    <span class="rank-gold">{{ globalRank(i) }}</span>
+                  }
+                  @else if (globalRank(i) === 2) {
+                    <span class="rank-silver">{{ globalRank(i) }}</span>
+                  }
+                  @else if (globalRank(i) === 3) {
+                    <span class="rank-bronze">{{ globalRank(i) }}</span>
+                  }
+                  @else { {{ globalRank(i) }} }
+                </td>
+                <td class="leaderboard__table-cell">
+                  <div class="user-cell">
+                    @if (getAvatarUrl(entry.avatar); as avatarUrl) {
+                      <img [src]="avatarUrl" [alt]="entry.username" class="avatar-img" />
+                    } @else {
+                      <span class="avatar-placeholder">
+                        {{ entry.username[0] }}
+                      </span>
+                    }
+                    <strong>{{ entry.username }}</strong>
+                  </div>
+                </td>
+                <td class="leaderboard__table-cell leaderboard__table-cell--stat">
+                  <span class="badge badge--sage">{{ entry.solvedCount }}</span>
+                </td>
+                <td class="leaderboard__table-cell leaderboard__table-cell--avg">
+                  {{ entry.avgAttempts | number: '1.1-1' }}
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      @if (totalPages() > 1) {
+        <nav aria-label="Paginazione classifica" class="pagination">
+          <button
+            type="button"
+            class="btn btn--ghost btn--sm"
+            [disabled]="page() === 1"
+            (click)="goToPage(page() - 1)"
+            aria-label="Pagina precedente"
+          >
+            ← Precedente
+          </button>
+
+          <span class="text-sm text-muted pagination__info">
+            Pagina {{ page() }} di {{ totalPages() }}
+          </span>
+
+          <button
+            type="button"
+            class="btn btn--ghost btn--sm"
+            [disabled]="page() === totalPages()"
+            (click)="goToPage(page() + 1)"
+            aria-label="Pagina successiva"
+          >
+            Successiva →
+          </button>
+        </nav>
+      }
+    }
+  </div>
+</div>

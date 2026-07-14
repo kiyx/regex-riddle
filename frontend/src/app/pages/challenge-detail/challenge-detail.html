@@ -1,0 +1,178 @@
+<div class="page detail">
+  <div class="container">
+    @if (loading()) {
+      <div class="loading-center">
+        <div class="spinner spinner-center"></div>
+        <p class="text-muted">Caricamento sfida...</p>
+      </div>
+    } @else if (error()) {
+      <div class="form-parchment fade-in-up text-center error-pad">
+        <span class="error-icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--wood-400)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </span>
+        <h3 class="font-scroll" style="margin-bottom: var(--space-2)">{{ error() }}</h3>
+        <a routerLink="/dashboard" class="btn btn--ghost btn--sm">← Torna alla Dashboard</a>
+      </div>
+    } @else if (challenge(); as c) {
+      <a routerLink="/dashboard" class="back-link fade-in-up">← Torna alla Dashboard</a>
+
+      <div class="card fade-in-up card--mb">
+        <div class="hero-top">
+          <div>
+            <h1 class="font-scroll title-lg">{{ c.title }}</h1>
+            <div class="text-sm text-muted">
+              di <strong class="author-name">{{ c.author.username }}</strong>
+              <span class="dot-separator">·</span>
+              <span>{{ c.createdAt | date: 'mediumDate' }}</span>
+            </div>
+          </div>
+          <div class="actions-row">
+            @if (isSolved()) {
+              <span class="badge badge--success">Risolta</span>
+            }
+            @if (isOwner()) {
+              <button type="button" class="btn btn--danger btn--sm" (click)="deleteChallenge()">Elimina</button>
+            }
+          </div>
+        </div>
+        @if (c.description) {
+          <p class="text-secondary desc-text">{{ c.description }}</p>
+        }
+      </div>
+
+      @if (isSolved()) {
+        <div class="card fade-in-up detail__solved-card">
+          <div class="flex-gap">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--neon-green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+            <div>
+              <div class="detail__solved-text">Hai risolto questa sfida!</div>
+              <div class="text-sm text-muted">Ottimo lavoro! Non è più necessario inviare altri tentativi.</div>
+            </div>
+          </div>
+        </div>
+      }
+
+      <div class="detail__grid">
+        <div class="card fade-in-up">
+          <h3 class="font-scroll panel-title">Esempi</h3>
+          <p class="text-sm text-muted panel-hint">La regex deve comportarsi così su questi esempi pubblici.</p>
+
+          <div class="flex-col-gap">
+            <div class="detail__example-box--pos">
+              <span class="detail__example-label--pos">Soddisfa</span>
+              <code class="code-block">{{ c.positiveExample }}</code>
+            </div>
+            <div class="detail__example-box--neg">
+              <span class="detail__example-label--neg">NON soddisfa</span>
+              <code class="code-block">{{ c.negativeExample }}</code>
+            </div>
+          </div>
+        </div>
+
+        @if (auth.isAuthenticated()) {
+          @if (!isOwner() && !isSolved()) {
+            <div class="card fade-in-up">
+              <h3 class="font-scroll panel-title">Il Tuo Tentativo</h3>
+              <p class="text-sm text-muted panel-hint">Scrivi una regex che soddisfi l'esempio positivo ma NON quello negativo.</p>
+
+              <form (ngSubmit)="submitGuess()" class="guess-form">
+                <label class="label" for="guess-input">La tua Regex</label>
+                <div class="flex-gap">
+                  <input
+                    id="guess-input"
+                    type="text"
+                    class="input input--mono input-flex"
+                    placeholder="es. ^[aeiou]+$"
+                    [ngModel]="regexInput()"
+                    (ngModelChange)="regexInput.set($event)"
+                    name="guess"
+                  />
+                  <button type="submit" class="btn btn--primary" [disabled]="guessing() || !regexInput().trim()">
+                    @if (guessing()) {
+                      <span class="spinner spinner--small"></span>
+                    } @else {
+                      Invia
+                    }
+                  </button>
+                </div>
+              </form>
+
+              @if (guessError()) {
+                <div class="alert alert--error alert-mb">
+                  {{ guessError() }}
+                </div>
+              }
+
+              @if (result(); as res) {
+                <div class="result-box" [class.result-box--correct]="res.isCorrect">
+                  @if (res.isCorrect) {
+                    <div class="result-text--correct">Corretto!</div>
+                  } @else {
+                    <div class="result-text--wrong">Non ancora</div>
+                  }
+
+                  <div class="result-bars">
+                    <div>
+                      <div class="bar-header">
+                        <span>Controlli positivi</span>
+                        <span>{{ res.positiveMatches }}/{{ res.totalPositive }}</span>
+                      </div>
+                      <div class="bar-track">
+                        <div class="bar-fill--green" [style.width.%]="res.totalPositive > 0 ? (res.positiveMatches / res.totalPositive) * 100 : 0"></div>
+                      </div>
+                    </div>
+                    <div>
+                      <div class="bar-header">
+                        <span>Controlli negativi</span>
+                        <span>{{ res.negativeMatches }}/{{ res.totalNegative }}</span>
+                      </div>
+                      <div class="bar-track">
+                        <div class="bar-fill--red" [style.width.%]="res.totalNegative > 0 ? (res.negativeMatches / res.totalNegative) * 100 : 0"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          } @else if (isOwner()) {
+            <div class="card fade-in-up">
+              <h3 class="font-scroll panel-title">La tua Sfida</h3>
+              <p class="text-secondary">Sei l'autore di questo enigma. Non puoi risolverlo — solo i risolutori possono provare.</p>
+            </div>
+          }
+        } @else {
+          <div class="card fade-in-up">
+            <h3 class="font-scroll panel-title">Tentativi</h3>
+            <p class="text-secondary">
+              <a routerLink="/login">Accedi</a> o <a routerLink="/signup">registrati</a> per provare a risolvere questa sfida.
+            </p>
+          </div>
+        }
+      </div>
+
+      @if (auth.isAuthenticated() && attempts().length > 0) {
+        <div class="card fade-in-up mt-5">
+          <h3 class="font-scroll panel-title" style="margin-bottom: var(--space-4)">Cronologia Tentativi</h3>
+          <div class="flex-col-gap">
+            @for (a of attempts(); track a.id) {
+              <div class="attempt-row" [class.attempt-row--correct]="a.isCorrect">
+                <code class="attempt-regex">{{ a.proposedRegex }}</code>
+                <div class="attempt-stats">
+                  <span class="attempt-stat--pos">{{ a.positiveMatches }}/{{ a.totalPositive }}</span>
+                  <span class="attempt-stat--neg">{{ a.negativeMatches }}/{{ a.totalNegative }}</span>
+                </div>
+                <span class="text-muted attempt-date">{{ a.attemptedAt | date: 'short' }}</span>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    }
+  </div>
+</div>

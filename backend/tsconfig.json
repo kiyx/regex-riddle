@@ -1,0 +1,34 @@
+{
+  "compilerOptions":
+  {
+    /* Base Options */
+    "target": "ES2025",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+
+    /* Strict Type-Checking Options */
+    "strict": true,                                 // Abilita tutti i controlli strict
+    "noImplicitAny": true,                          // Vieta il tipo 'any' implicito
+    "strictNullChecks": true,                       // Gestione rigorosa di null e undefined
+    "strictFunctionTypes": true,                    // Controlla i parametri delle funzioni
+    "strictBindCallApply": true,                    // Controlla 'bind', 'call', e 'apply'
+    "strictPropertyInitialization": true,           // Obbliga a inizializzare le proprietà delle classi
+    "noImplicitThis": true,                         // Vieta l'uso di 'this' se non è tipizzato
+    "alwaysStrict": true,                           // Aggiunge 'use strict' in ogni file compilato
+
+    /* Additional Checks (Qualità del codice) */
+    "noUnusedLocals": true,                         // Errore se dichiari variabili che non usi
+    "noUnusedParameters": true,                     // Errore se dichiari parametri che non usi
+    "exactOptionalPropertyTypes": true,             // Rigore sulle proprietà opzionali (non puoi assegnargli undefined esplicitamente)
+    "noImplicitReturns": true,                      // Ogni ramo di una funzione DEVE ritornare un valore
+    "noFallthroughCasesInSwitch": true,             // Previene errori negli switch-case
+    "noUncheckedIndexedAccess": true,                // Obbliga a controllare se un elemento di un array/oggetto esiste prima di usarlo
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}

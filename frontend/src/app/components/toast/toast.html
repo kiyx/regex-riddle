@@ -1,0 +1,15 @@
+@if (service.all().length > 0) {
+  <div class="toast-container">
+    @for (toast of service.all(); track toast.id) {
+      <div
+        class="toast toast--{{ toast.type }}"
+        role="alert"
+        (click)="service.remove(toast.id)"
+      >
+        <span class="toast__icon">{{ icon(toast.type) }}</span>
+        <span class="toast__msg">{{ toast.message }}</span>
+        <button class="toast__close" type="button" (click)="service.remove(toast.id); $event.stopPropagation()">✕</button>
+      </div>
+    }
+  </div>
+}
