@@ -104,20 +104,18 @@ const swaggerDefinition = {
 
 const __dirname = import.meta.dirname;
 
-/*  Calcola il path relativo dalla cwd alla directory di questo file
-    (es. "src" se avviato da backend/, "backend/src" se avviato da root).
-    In produzione (dist/) sarà "dist" / "backend/dist".                */
-const relDir = path.relative(process.cwd(), __dirname);
+/*  Risale da dist/ a src/ per trovare i file sorgente TypeScript
+    con i commenti JSDoc @swagger, anche quando il server è avviato
+    dalla cartella dist/ (npm start).
+    Usa path relativi a process.cwd() per compatibilità con glob.       */
+const srcDir = path.relative(process.cwd(), path.resolve(__dirname, "..", "src")).replace(/\\/g, "/");
 
 const options = {
   swaggerDefinition,
   apis: [
-    path.join(relDir, "routes/*.ts"),
-    path.join(relDir, "routes/*.js"),
-    path.join(relDir, "controllers/*.ts"),
-    path.join(relDir, "controllers/*.js"),
-    path.join(relDir, "schemas/*.ts"),
-    path.join(relDir, "schemas/*.js"),
+    `${srcDir}/routes/*.ts`,
+    `${srcDir}/controllers/*.ts`,
+    `${srcDir}/schemas/*.ts`,
   ],
 };
 
