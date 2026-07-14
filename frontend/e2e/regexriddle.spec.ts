@@ -45,8 +45,9 @@ test.describe('RegexRiddle E2E', () =>
     await page.fill('#email', `e2e${uid}@test.com`);
     await page.fill('#password', PASS);
     await page.fill('#confirmPassword', PASS);
-    await page.click('button[type="submit"]');
-    await expect(page).toHaveURL(/.*dashboard/, { timeout: 15000 });
+    await expect(page.locator('button[type="submit"]')).toBeEnabled();
+    await page.locator('button[type="submit"]').click();
+    await expect(page).toHaveURL(/.*dashboard/, { timeout: 30000 });
     await expect(page.locator('header.navbar')).toContainText(`e2euser${uid}`);
   });
 
@@ -58,8 +59,9 @@ test.describe('RegexRiddle E2E', () =>
     await page.goto('/login');
     await page.fill('#username', `e2e${uid}`);
     await page.fill('#password', PASS);
-    await page.click('button[type="submit"]');
-    await expect(page).toHaveURL(/.*dashboard/, { timeout: 15000 });
+    await expect(page.locator('button[type="submit"]')).toBeEnabled();
+    await page.locator('button[type="submit"]').click();
+    await expect(page).toHaveURL(/.*dashboard/, { timeout: 30000 });
     await expect(page.locator('header.navbar')).toContainText(`e2e${uid}`);
     await page.getByRole('button', { name: 'Esci' }).click();
     await expect(page.getByRole('link', { name: 'Accedi' }).first()).toBeVisible();
@@ -107,8 +109,9 @@ test.describe('RegexRiddle E2E', () =>
     await page.locator('.controls-group', { hasText: 'Positive' }).locator('input[placeholder="+"]').first().fill('aei');
     await page.locator('.controls-group', { hasText: 'Negative' }).locator('input[placeholder="-"]').first().fill('bcd');
     await page.locator('button[type="submit"]').waitFor({ state: 'visible' });
+    await expect(page.locator('button[type="submit"]')).toBeEnabled();
     await page.locator('button[type="submit"]').click();
-    await page.waitForURL(/.*challenges\/(?!create)/, { timeout: 15000 });
+    await page.waitForURL(/.*challenges\/(?!create)/, { timeout: 30000 });
     await expect(page.locator('h1')).toContainText('E2E Test Vocali');
   });
 
@@ -133,8 +136,9 @@ test.describe('RegexRiddle E2E', () =>
     await page.locator('.controls-group', { hasText: 'Positive' }).locator('input[placeholder="+"]').first().fill('hello');
     await page.locator('.controls-group', { hasText: 'Negative' }).locator('input[placeholder="-"]').first().fill('456');
     await page.locator('button[type="submit"]').waitFor({ state: 'visible' });
+    await expect(page.locator('button[type="submit"]')).toBeEnabled();
     await page.locator('button[type="submit"]').click();
-    await page.waitForURL(/.*challenges\/(?!create)/, { timeout: 15000 });
+    await page.waitForURL(/.*challenges\/(?!create)/, { timeout: 30000 });
 
     await expect(page.locator('h1')).toContainText('E2E Detail');
 

@@ -5,6 +5,7 @@ export default defineConfig
 ({
   testDir: './e2e',
   fullyParallel: true,
+  workers: 4,
   globalSetup: './e2e/global-setup.ts',
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
@@ -62,12 +63,14 @@ export default defineConfig
       url: 'http://localhost:8080/health',
       reuseExistingServer: !process.env.CI,
       timeout: 120 * 1000,
+      gracefulShutdown: { signal: 'SIGTERM', timeout: 5000 },
     },
     {
       command: 'npx ng serve --port 4200',
       url: 'http://localhost:4200',
       timeout: 120 * 1000,
       reuseExistingServer: !process.env.CI,
+      gracefulShutdown: { signal: 'SIGTERM', timeout: 5000 },
     },
   ]
 });
