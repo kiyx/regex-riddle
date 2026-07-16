@@ -10,7 +10,7 @@
 
 # Configurazione
 
-## Database (QUESTA PARTE NON VA FATTA SE IL SUO COGNOME è STARACE, HO MESSO IO IL .env NELLA CONSEGNA PERCHè USO DB ESTERNO ;) )
+## Database
 
 Creare un database PostgreSQL e copiare il file di esempio:
 
