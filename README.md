@@ -5,7 +5,7 @@
 **Indovina la regex, risolvi l’enigma, scala la classifica.**
 
 RegexRiddle è una piattaforma social per creare e risolvere enigmi basati su espressioni regolari.
-Costruisci sfide, sfida gli altri, migliora le tue skill — e fatti notare.
+Costruisci sfide, sfida gli altri, migliora le tue skill e fatti notare.
 
 <p>
   <img src="https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white" alt="Angular" />
