@@ -1,11 +1,13 @@
 <div align="center">
 
-# 🔮 RegexRiddle
+**English** | [Italiano](README.it.md)
 
-**Indovina la regex, risolvi l’enigma, scala la classifica.**
+# RegexRiddle
 
-RegexRiddle è una piattaforma social per creare e risolvere enigmi basati su espressioni regolari.
-Costruisci sfide, sfida gli altri, migliora le tue skill e fatti notare.
+**Guess the regex, solve the riddle, climb the leaderboard.**
+
+RegexRiddle is a social platform for creating and solving puzzles based on regular expressions.
+Build challenges, compete with others, sharpen your skills — and stand out.
 
 <p>
   <img src="https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white" alt="Angular" />
@@ -23,79 +25,81 @@ Costruisci sfide, sfida gli altri, migliora le tue skill e fatti notare.
 
 ---
 
-## 🎮 Come funziona
+## How It Works
 
-Ogni **sfida** nasconde una *regex segreta*, nota solo all’autore. Tutti gli altri vedono solo:
+Every **challenge** hides a *secret regex*, known only to its author. Everyone else sees only:
 
-| Indizio | Significato |
+| Clue | Meaning |
 |---------|-------------|
-| 🟢 **Esempio positivo** | Una stringa che la regex segreta deve accettare |
-| 🔴 **Esempio negativo** | Una stringa che la regex segreta deve rifiutare |
-| 📝 **Titolo e descrizione** | Il contesto per capire il pattern nascosto |
+| **Positive example** | A string the secret regex must accept |
+| **Negative example** | A string the secret regex must reject |
+| **Title and description** | The context to figure out the hidden pattern |
 
-Il tuo compito è scrivere un’espressione regolare che **matchi tutte le stringhe positive** e **zero stringhe negative** tra quelle di controllo nascoste.
+Your job is to write a regular expression that **matches all positive strings** and **zero negative strings** among the hidden control strings.
 
-Ad ogni tentativo ricevi un feedback numerico: quanti match hai azzeccato. Ma le stringhe restano segrete.
-**Vinci solo quando la tua regex è corretta al 100%**.
-
+On every attempt you get numeric feedback: how many matches you got right. But the strings stay secret.
+**You win only when your regex is 100% correct.**
 
 ---
 
-## ✨ Cosa puoi fare
+## What You Can Do
 
 | | |
 |:-|:-|
-| 🧩 **Creare sfide** | Definisci regex segreta, esempi e stringhe di controllo positive/negative |
-| 🎯 **Risolvere sfide** | Studia gli indizi e trova il pattern nascosto |
-| 📜 **Cronologia tentativi** | Tieni traccia dei tuoi approcci e migliora |
-| 🏆 **Classifica globale** | Scala la leaderboard in base alle sfide risolte e ai tentativi usati |
-| 🔐 **Profilo utente** | Avatar, statistiche personale e sfide create |
+| **Create challenges** | Define the secret regex, examples and positive/negative control strings |
+| **Solve challenges** | Study the clues and find the hidden pattern |
+| **Attempt history** | Keep track of your approaches and improve |
+| **Global leaderboard** | Climb the ranking based on solved challenges and attempts used |
+| **User profile** | Avatar, personal statistics and created challenges |
+
 ---
 
-## 🛠️ Stack tecnologico
+## Tech Stack
 
-| Layer | Tecnologie |
+| Layer | Technologies |
 |-------|------------|
-| **Frontend** | Angular 21 · TypeScript |
+| **Frontend** | Angular 21 · TypeScript · Tailwind CSS |
 | **Backend** | Node.js · Express · TypeScript |
-| **Database** | PostgreSQL (supporto nativo Neon) · Prisma ORM |
-| **Auth & Sicurezza** | JWT · bcrypt · Helmet · express-rate-limit · RE2 |
+| **Database** | PostgreSQL (native Neon support) · Prisma ORM |
+| **Auth & Security** | JWT · bcrypt · Helmet · express-rate-limit · RE2 |
+| **Validation & API docs** | Zod · Swagger (OpenAPI) |
+| **Logging** | Pino |
 | **Testing & QA** | Playwright (cross-browser) · Biome |
 
 ---
 
-## 🚀 Avvio rapido
+## Quick Start
 
-### Prerequisiti
+### Prerequisites
 
 - Node.js 20 LTS+
 - npm 11+
-- PostgreSQL locale o database cloud (es. Neon)
+- Local PostgreSQL or a cloud database (e.g. Neon)
 
-### 1. Clona il repository
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/kiyx/regex-riddle.git
 cd regex-riddle
 ```
 
-### 2. Configura il backend
+### 2. Configure the backend
 
 ```bash
 cp backend/.env.dummy backend/.env
 ```
 
-Modifica `backend/.env` con i tuoi dati:
+Edit `backend/.env` with your own values:
 
 ```env
 DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DBNAME"
-JWT_SECRET="una-chiave-super-segreta-minimo-32-caratteri"
+JWT_SECRET="a-super-secret-key-at-least-32-characters"
 JWT_EXPIRES_IN="7d"
 PORT=8080
 CLIENT_URL="http://localhost:4200"
 ```
 
-### 3. Avvia il backend
+### 3. Start the backend
 
 ```bash
 cd backend
@@ -105,10 +109,10 @@ npx prisma migrate deploy
 npm run dev
 ```
 
-🌐 API: `http://localhost:8080`
-📚 Swagger: `http://localhost:8080/api-docs`
+**API:** `http://localhost:8080`
+**Swagger:** `http://localhost:8080/api-docs`
 
-### 4. Avvia il frontend
+### 4. Start the frontend
 
 ```bash
 cd frontend
@@ -116,11 +120,11 @@ npm install
 npm start
 ```
 
-🌐 App: `http://localhost:4200`
+**App:** `http://localhost:4200`
 
 ---
 
-## 🏭 Avvio in produzione
+## Production Build
 
 ```bash
 # Backend
@@ -140,54 +144,57 @@ npx serve -s dist/frontend/browser -l 4200
 
 ---
 
-## 🧪 Test End-to-End
+## End-to-End Tests
 
-I test Playwright girano su Chrome, Firefox, Safari, Edge e dispositivi mobile.
+Playwright tests run on Chromium, Firefox, WebKit, Microsoft Edge, Google Chrome and mobile emulation (Pixel 5, iPhone 12).
 
 ```bash
 cd frontend
-npx playwright install      # solo la prima volta
-npx playwright test         # esegui i test
-npx playwright show-report  # visualizza il report
+npx playwright install      # first time only
+npx playwright test         # run the tests
+npx playwright show-report  # view the report
 ```
 
-> Per i test, imposta `DISABLE_RATE_LIMIT=true` in `backend/.env`.
+> For testing, set `DISABLE_RATE_LIMIT=true` in `backend/.env`.
 
 ---
 
-## 📁 Struttura del progetto
+## Project Structure
 
 ```
 regex-riddle/
 ├── backend/
 │   ├── src/
-│   │   ├── controllers/      # logica di business
-│   │   ├── routes/           # API REST
-│   │   ├── middlewares/      # auth, validazione, rate limiting
-│   │   ├── schemas/          # validazione input con Zod
+│   │   ├── controllers/      # business logic
+│   │   ├── routes/           # REST APIs (+ e2e test routes)
+│   │   ├── middlewares/      # auth, validation, rate limiting
+│   │   ├── schemas/          # input validation with Zod
 │   │   ├── lib/              # Prisma client, logger
-│   │   └── server.ts         # entry point Express
+│   │   ├── types/            # Express type augmentation
+│   │   └── server.ts         # Express entry point
 │   └── prisma/
 │       ├── schema.prisma
 │       └── migrations/
 └── frontend/
+    ├── e2e/                  # Playwright end-to-end tests
     └── src/app/
-        ├── pages/            # home, sfida, classifica, profilo...
-        ├── components/       # componenti condivisi
-        ├── services/         # API e gestione auth
-        └── guards/           # protezione route
+        ├── pages/            # home, challenge, leaderboard, profile...
+        ├── components/       # shared components
+        ├── services/         # API and auth services
+        ├── interceptors/     # HTTP interceptors
+        └── guards/           # route protection
 ```
 
 ---
 
-## 🔒 Sicurezza
+## Security
 
-- Helmet per header HTTP sicuri
-- CORS configurato per il frontend
-- Rate limiting globale + dedicato all’autenticazione
-- Password hashate con bcrypt
-- Validazione input con Zod
-- Regex eseguite in sandbox RE2
-- Timeout sulle richieste per prevenire loop infiniti
+- Helmet for secure HTTP headers
+- CORS configured for the frontend
+- Global rate limiting + dedicated rate limiting on authentication
+- Passwords hashed with bcrypt
+- Input validation with Zod
+- Regex executed in an RE2 sandbox
+- Request timeouts to prevent infinite loops
 
 ---
